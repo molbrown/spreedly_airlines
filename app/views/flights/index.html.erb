@@ -1,4 +1,27 @@
 
-<h1>Spreedly Airlines</h1>
-<h3>Tickets to great places that won't actually take you there.</h3>
+<h1>Spreedly Airlines   <ion-icon name="airplane"></ion-icon></h1>
+<h4 class="font-italic">Tickets to great places that won't actually take you there.</h3>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Destination</th>
+            <th scope="col">Origin</th>
+            <th scope="col">Price</th>
+            <th scope="col"> </th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @flights.each do |flight| %>
+            <tr>
+                <th scope="row"><%= flight.destination %></th>
+                <td><%= flight.origin %></td>
+                <td><%= number_to_currency((flight.price)/100) %></td>
+                <td><%= link_to 'Buy This', flight_path(flight), class: "btn btn-primary" %></td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
+
+
+<script src="https://unpkg.com/ionicons@4.4.2/dist/ionicons.js"></script>
