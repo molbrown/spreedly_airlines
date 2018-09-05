@@ -1,1 +1,39 @@
 <h2>Flight to <%= @flight.destination %></h2>
+
+<form class="my-4">
+    <div class="form-group">
+        <label for="exampleFormControlSelect1">Ticket Quantity</label>
+        <select class="form-control" id="quantity" onchange="calculateTotal()">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            <option>8</option>
+        </select>
+    </div>
+    <div id="total" class="bg-primary text-white p-3 rounded font-weight-light">
+        Total price: <%= number_to_currency((@flight.price)/100) %>
+    </div>
+    <br>
+    <h4>Buyer Information</h4>
+    <div class="form-group">
+        <label for="exampleFormControlInput1">Your Name</label>
+        <input type="email" class="form-control" id="text" placeholder="Full Name">
+    </div>
+    <div class="form-group">
+        <label for="exampleFormControlInput1">Email address</label>
+        <input type="email" class="form-control" id="email" placeholder="name@example.com">
+    </div>
+</form>
+
+
+<script>
+    function calculateTotal(){
+        var qty = document.getElementById('quantity').value;
+        var tot= <%= @flight.price %> * qty;
+        document.getElementById('total').innerHTML = "Total price: $"+tot/100;
+    }
+</script>
