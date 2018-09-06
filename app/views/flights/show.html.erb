@@ -1,6 +1,8 @@
+
+
 <h2>Flight to <%= @flight.destination %></h2>
 
-<form class="my-4">
+<form class="my-4" id="payment-form">
     <div class="form-group">
         <label for="exampleFormControlSelect1">Ticket Quantity</label>
         <select class="form-control" id="quantity" onchange="calculateTotal()">
@@ -14,26 +16,52 @@
             <option>8</option>
         </select>
     </div>
-    <div id="total" class="bg-primary text-white p-3 rounded font-weight-light">
-        Total price: <%= number_to_currency((@flight.price)/100) %>
+    <div class="bg-primary text-white p-3 rounded font-weight-light">
+        Total price: <div id="total">$<%= (@flight.price)/100 %></div>
     </div>
     <br>
     <h4>Buyer Information</h4>
     <div class="form-group">
-        <label for="exampleFormControlInput1">Your Name</label>
-        <input type="email" class="form-control" id="text" placeholder="Full Name">
-    </div>
-    <div class="form-group">
-        <label for="exampleFormControlInput1">Email address</label>
+        <label for="email">Email address</label>
         <input type="email" class="form-control" id="email" placeholder="name@example.com">
     </div>
+    <input type="hidden" name="payment_method_token" id="payment_method_token">
 </form>
 
+<button type="button" class="btn btn-outline-primary" onClick="SpreedlyExpress.openView()">Payment Info</button>
+
+<script>
+    function spreedlyInit(){
+    SpreedlyExpress.init("Kd2fgjLosIVg7XxEktH7lnLU3YH", {
+        "amount": document.getElementById('total').innerHTML,
+        "company_name": "Spreedly Airlines",
+        "sidebar_top_description": "You're not going anywhere.",
+        "sidebar_bottom_description": "Total price",
+        "name_label": "Cardholder Name"
+        }, {
+        "email": "customer@email.com"
+        }
+    );
+    
+
+    SpreedlyExpress.onPaymentMethod(function(token, paymentMethod) {
+        // Send requisite payment method info to backend
+        var tokenField = document.getElementById("payment_method_token");
+
+        tokenField.setAttribute("value", token);
+
+        var masterForm = document.getElementById('payment-form');
+        masterForm.submit();
+    });
+    }
+</script>
 
 <script>
     function calculateTotal(){
         var qty = document.getElementById('quantity').value;
         var tot= <%= @flight.price %> * qty;
-        document.getElementById('total').innerHTML = "Total price: $"+tot/100;
+        document.getElementById('total').innerHTML = "$"+tot/100;
     }
 </script>
+
+<script src="https://core.spreedly.com/iframe/express-2.min.js" onload="spreedlyInit()"></script>

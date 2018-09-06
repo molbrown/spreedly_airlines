@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180904200230) do
+ActiveRecord::Schema.define(version: 20180906135848) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,24 @@ ActiveRecord::Schema.define(version: 20180904200230) do
     t.string  "destination"
     t.integer "price"
     t.integer "tix_purchased"
+  end
+
+  create_table "saved_cards", force: :cascade do |t|
+    t.string   "email"
+    t.string   "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.string   "email"
+    t.string   "token"
+    t.integer  "amount"
+    t.integer  "quantity"
+    t.integer  "flight_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["flight_id"], name: "index_transactions_on_flight_id", using: :btree
   end
 
 end

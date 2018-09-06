@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  email: MyString
+  token: MyString
+  amount: 1
+  quantity: 1
+
+two:
+  email: MyString
+  token: MyString
+  amount: 1
+  quantity: 1
