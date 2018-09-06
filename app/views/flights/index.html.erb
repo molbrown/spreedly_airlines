@@ -17,7 +17,7 @@
                 <th scope="row"><%= flight.destination %></th>
                 <td><%= flight.origin %></td>
                 <td>$<%= (flight.price)/100 %></td>
-                <td><%= link_to 'Buy This', flight_path(flight), class: "btn btn-primary" %></td>
+                <td><%= link_to 'Buy This', "/flights/#{flight.id}/transactions/new", class: "btn btn-primary" %></td>
             </tr>
         <% end %>
     </tbody>
