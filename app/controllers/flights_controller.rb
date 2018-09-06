@@ -5,7 +5,7 @@ class FlightsController < ApplicationController
     end
 
     def show
-        @flight = Flight.find(params[:id])
+        @transactions = Transaction.order(created_at: :desc)
     end
 
 

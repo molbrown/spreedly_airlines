@@ -11,6 +11,11 @@
   <body>
     <div class="container">
       <div class="py-4">
+
+        <% flash.each do |name, msg| -%>
+          <%= content_tag :div, msg, class: flash_classes(name) %>
+        <% end -%>
+
         <%= yield %>
       </div>
     </div>
