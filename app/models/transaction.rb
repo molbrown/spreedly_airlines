@@ -13,7 +13,7 @@ class Transaction < ApplicationRecord
             basic_auth: {
                 "username": ENV['spreedly_env_key'],
                 "password": ENV['spreedly_secret']
-            }
+            },
             body: {
                 "transaction": {
                     "payment_method_token": token,
