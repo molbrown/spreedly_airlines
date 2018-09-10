@@ -2,7 +2,7 @@ class TransactionsController < ApplicationController
     include SaveCard
 
     def index
-        @transactions = Transaction.all
+        @transactions = Transaction.order(created_at: :desc)
     end
 
     def new

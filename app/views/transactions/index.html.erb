@@ -1,0 +1,27 @@
+
+<h3>Processed Transactions</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Purchased</th>
+            <th scope="col">Total</th>
+            <th scope="col">Email</th>
+            <th scope="col">Last 4</th>
+            <th scope="col">Destination</th>
+            <th scope="col">Quantity</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @transactions.each do |t| %>
+            <tr>
+                <th scope="row"><%= time_ago_in_words(t.created_at)+ " ago" %></th>
+                <td>$<%= (t.amount)/100 %></td>
+                <td><%= t.email %></td>
+                <td><%= "####" %></td>
+                <td><%= t.flight.destination %></td>
+                <td><%= t.quantity %></td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
