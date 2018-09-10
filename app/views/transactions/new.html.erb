@@ -2,35 +2,28 @@
 
 <h2>Flight to <%= @flight.destination %></h2>
 
-<%= form_for @transaction do %>
-    <%# <div class="form-group"> %>
-        <label for="quantity">Ticket Quantity</label>
-        <select class="form-control" id="quantity" onchange="calculateTotal()">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>
-            <option>7</option>
-            <option>8</option>
-        </select>
-    <%# </div> %>
+<%= form_for @transaction do |f| %>
+    <div class="form-group"> 
+        <%= f.label "Ticket Quantity" %>
+        <%= f.select( :quantity, (1..8), {}, {:class => 'form-control', :onchange => 'calculateTotal()'}) %>
+    </div>
     <div class="bg-primary text-white p-3 rounded font-weight-light">
         Total price: <div id="total">$<%= (@flight.price)/100 %></div>
     </div>
     <br>
     <h4>Buyer Information</h4>
-    <%# <div class="form-group"> %>
-        <label for="email">Email address</label>
-        <input type="email" class="form-control" id="email" placeholder="name@example.com">
-    <%# </div>
-    <div class="form-check"> %>
+    <div class="form-group"> 
+        <%= f.label "Email address" %>
+        <%= f.text_field :email, :class => 'form-control', :placeholder => 'name@example.com'%>
+    </div>
+    <div class="form-check">
         <input class="form-check-input" type="checkbox" value="" id="save_card">
         <label class="form-check-label" for="save_card">
             Save my card for future purchases
         </label>
-    <%# </div> %>
+        <%= f.label "Get Email" %> <br />
+        <%= f.check_box :save_card, {}, "Save Email" %> <br />
+    </div>
     <input type="hidden" name="payment_method_token" id="payment_method_token">
     <input type="hidden" name="flight_id" id="flight_id" value=<%= @id %> >
 <% end %>
