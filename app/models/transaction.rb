@@ -4,6 +4,10 @@ class Transaction < ApplicationRecord
     belongs_to :flight
     include HTTParty
 
+    validates :email, presence: true
+    validates :token, presence: true
+    validates :amount, presence: true
+
     def buy_gateway(token, amount)
         base_uri = 'https://core.spreedly.com/v1/gateways/'
         buy_uri = base_uri + ENV['gateway_token']+'/purchase.json'
