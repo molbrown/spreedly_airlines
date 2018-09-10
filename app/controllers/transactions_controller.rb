@@ -1,4 +1,5 @@
 class TransactionsController < ApplicationController
+    include SaveCard
 
     def index
         @transactions = Transaction.all
@@ -19,11 +20,7 @@ class TransactionsController < ApplicationController
         buy_success = @transaction.buy_gateway(token, amount)
         if buy_success && buy_success['transaction']['succeeded'] == true
             if @transaction.save && @transaction.save_card == true
-                Card.create(
-                    :email => @transaction.email,
-                    :token => @transaction.token,
-                    :flight_id => @transaction.flight_id
-                )
+                new_card(@transaction)
                 redirect_to flights_path, notice: "Your purchase was successful."
             elsif @transaction.save
                 redirect_to flights_path, notice: "Your purchase was successful."
