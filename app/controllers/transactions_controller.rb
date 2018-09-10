@@ -11,15 +11,17 @@ class TransactionsController < ApplicationController
     end
 
     def create
-        @flight = Flight.find(params[:flight_id])
+        @flight = Flight.find(transaction_params[:flight_id])
         @transaction = Transaction.new(transaction_params)
-        amount = @flight.price * transaction_params[:quantity]
-        token = transaction_params[:payment_method_token]
-        if @transaction.buy_gateway(token, amount)
+        amount = transaction_params[:amount]
+        token = transaction_params[:token]
+
+        buy_success = @transaction.buy_gateway(token, amount)
+        if buy_success && buy_success['transaction']['succeeded'] == true
             if @transaction.save
                 redirect_to flights_path, notice: "Your purchase was successful."
             else
-                render :new, alert: "payment failed to save"
+                render :new, alert: "payment made but failed to save"
             end
         else
             redirect_to flights_path, alert: "Payment declined"
@@ -31,7 +33,7 @@ class TransactionsController < ApplicationController
     private
 
     def transaction_params
-        params.require(:transaction).permit(:email, :payment_method_token, :amount, :flight_id, :quantity, :save_card)
+        params.require(:transaction).permit(:email, :token, :amount, :flight_id, :quantity, :save_card)
     end
 
 end

@@ -21,10 +21,12 @@ class Transaction < ApplicationRecord
                     "currency_code": "USD",
                     "retain_on_success": true
                 }
-            }
+            }.to_json
         }
         
         response = HTTParty.post(buy_uri, options)
-        puts response 
+        puts response.parsed_response
+        response.parsed_response 
+		# parse_response(response: response, token: token)
     end
 end

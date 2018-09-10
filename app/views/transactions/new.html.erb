@@ -17,15 +17,14 @@
         <%= f.text_field :email, :class => 'form-control', :placeholder => 'name@example.com'%>
     </div>
     <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="" id="save_card">
-        <label class="form-check-label" for="save_card">
-            Save my card for future purchases
-        </label>
-        <%= f.label "Get Email" %> <br />
-        <%= f.check_box :save_card, {}, "Save Email" %> <br />
+        <%= f.check_box :save_card, {} %> 
+        <%= f.label "Save my card for future purchases" %> 
     </div>
-    <input type="hidden" name="payment_method_token" id="payment_method_token">
-    <input type="hidden" name="flight_id" id="flight_id" value=<%= @id %> >
+    <%# <input type="hidden" name="payment_method_token" id="payment_method_token"> %>
+    <%= f.hidden_field :token %>
+    <%= f.hidden_field :amount, :value => @flight.price %>
+    <%= f.hidden_field :flight_id, :value => @id %>
+    <%# <input type="hidden" name="flight_id" id="flight_id" value=<%= @id %> 
 <% end %>
 
 <button type="button" class="btn btn-outline-primary" onmouseover= "spreedlyInit()" onClick="SpreedlyExpress.openView()">Payment Info</button>
@@ -45,7 +44,7 @@
     
     SpreedlyExpress.onPaymentMethod(function(token, paymentMethod) {
         // Send requisite payment method info to backend
-        var tokenField = document.getElementById("payment_method_token");
+        var tokenField = document.getElementById("transaction_token");
         tokenField.setAttribute("value", token);
 
         var masterForm = document.getElementById('new_transaction');
@@ -56,8 +55,10 @@
 
 <script>
     function calculateTotal(){
-        var qty = document.getElementById('quantity').value;
+        var qty = document.getElementById('transaction_quantity').value;
         var tot= <%= @flight.price %> * qty;
+        var setAmount = document.getElementById('transaction_amount');
+        setAmount.setAttribute("value", tot);
         document.getElementById('total').innerHTML = "$"+tot/100;
     }
 </script>

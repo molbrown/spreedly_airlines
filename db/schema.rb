@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180906135848) do
+ActiveRecord::Schema.define(version: 20180910140022) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20180906135848) do
     t.integer  "flight_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean  "save_card"
     t.index ["flight_id"], name: "index_transactions_on_flight_id", using: :btree
   end
 
