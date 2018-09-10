@@ -18,7 +18,14 @@ class TransactionsController < ApplicationController
 
         buy_success = @transaction.buy_gateway(token, amount)
         if buy_success && buy_success['transaction']['succeeded'] == true
-            if @transaction.save
+            if @transaction.save && @transaction.save_card == true
+                Card.create(
+                    :email => @transaction.email,
+                    :token => @transaction.token,
+                    :flight_id => @transaction.flight_id
+                )
+                redirect_to flights_path, notice: "Your purchase was successful."
+            elsif @transaction.save
                 redirect_to flights_path, notice: "Your purchase was successful."
             else
                 render :new, alert: "payment made but failed to save"
