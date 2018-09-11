@@ -17,22 +17,32 @@ class TransactionsController < ApplicationController
         amount = transaction_params[:amount]
         token = transaction_params[:token]
         if @transaction.valid?
-            buy_success = @transaction.buy_gateway(token, amount)
-            if buy_success && buy_success['transaction']['succeeded'] == true
-                if @transaction.save && @transaction.save_card == true
-                    @card = new_card(@transaction, buy_success)
-                    redirect_to flights_path, notice: "Your purchase was successful and payment method saved."
-                elsif @transaction.save
-                    redirect_to flights_path, notice: "Your purchase was successful."
+            if @transaction.expedia
+                expedia_success = @transaction.buy_expedia(@transaction)
+                if expedia_success && expedia_success['transaction']['succeeded'] == true
+                    redirect_to flights_path, notice: "Expedia received your reservation."
                 else
-                    render :new, alert: "payment made but failed to save"
+                    redirect_to '/transactions/new?flight_id='+@flight.id.to_s, alert: "Payment failed."
                 end
             else
-                redirect_to flights_path, alert: "Payment declined"
-            end 
+                buy_success = @transaction.buy_gateway(token, amount)
+                if buy_success && buy_success['transaction']['succeeded'] == true
+                    if @transaction.save && @transaction.save_card == true
+                        @card = new_card(@transaction, buy_success)
+                        redirect_to flights_path, notice: "Your purchase was successful and payment method saved."
+                    elsif @transaction.save
+                        redirect_to flights_path, notice: "Your purchase was successful."
+                    else
+                        render :new, alert: "Payment made but failed to save. Please contact Spreedly Airlines for your confirmation."
+                    end
+                else
+                    redirect_to '/transactions/new?flight_id='+@flight.id.to_s, alert: "Payment method declined"
+                end 
+            end
         else 
             redirect_to '/transactions/new?flight_id='+@flight.id.to_s, alert: "Email required"
         end
+
 
     end
     
@@ -41,7 +51,7 @@ class TransactionsController < ApplicationController
     private
 
     def transaction_params
-        params.require(:transaction).permit(:email, :token, :amount, :flight_id, :quantity, :save_card, :saved_cards_id)
+        params.require(:transaction).permit(:email, :token, :amount, :flight_id, :quantity, :save_card, :saved_cards_id, :expedia)
     end
 
 end
