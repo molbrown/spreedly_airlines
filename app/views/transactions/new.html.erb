@@ -20,11 +20,9 @@
         <%= f.check_box :save_card, {} %> 
         <%= f.label "Save my card for future purchases" %> 
     </div>
-    <%# <input type="hidden" name="payment_method_token" id="payment_method_token"> %>
     <%= f.hidden_field :token %>
     <%= f.hidden_field :amount, :value => @flight.price %>
-    <%= f.hidden_field :flight_id, :value => @id %>
-    <%# <input type="hidden" name="flight_id" id="flight_id" value=<%= @id %> 
+    <%= f.hidden_field :flight_id, :value => @id %> 
 <% end %>
 
 <button type="button" class="btn btn-outline-primary" onmouseover= "spreedlyInit()" onClick="SpreedlyExpress.openView()">Payment Info</button>
@@ -38,9 +36,10 @@
         "sidebar_bottom_description": "Total price",
         "name_label": "Cardholder Name"
         }, {
-        "email": document.getElementById('transaction_email').innerHTML
+        "email": document.getElementById('transaction_email').value
         }
     );
+  
     
     SpreedlyExpress.onPaymentMethod(function(token, paymentMethod) {
         // Send requisite payment method info to backend

@@ -21,8 +21,6 @@ class TransactionsController < ApplicationController
         if buy_success && buy_success['transaction']['succeeded'] == true
             if @transaction.save && @transaction.save_card == true
                 @card = new_card(@transaction, buy_success)
-                @transaction.saved_cards_id = @card.id
-                @transaction.save
                 redirect_to flights_path, notice: "Your purchase was successful and payment method saved."
             elsif @transaction.save
                 redirect_to flights_path, notice: "Your purchase was successful."
