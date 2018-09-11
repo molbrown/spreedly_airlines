@@ -7,18 +7,23 @@
             <th scope="col">Purchased</th>
             <th scope="col">Total</th>
             <th scope="col">Email</th>
-            <th scope="col">Last 4</th>
+            <th scope="col">Saved Card (Last 4)</th>
             <th scope="col">Destination</th>
             <th scope="col">Quantity</th>
         </tr>
     </thead>
     <tbody>
         <% @transactions.each do |t| %>
+            <% if t.saved_cards_id %>
+                <% four_dig = SavedCard.find(t.saved_cards_id).last_four%>
+            <% else %>
+                <% four_dig = "not saved card"%>
+            <% end %>
             <tr>
                 <th scope="row"><%= time_ago_in_words(t.created_at)+ " ago" %></th>
                 <td>$<%= (t.amount)/100 %></td>
                 <td><%= t.email %></td>
-                <td><%= SavedCard.find(t.saved_cards_id).last_four %></td>
+                <td><%= four_dig%></td>
                 <td><%= t.flight.destination %></td>
                 <td><%= t.quantity %></td>
             </tr>

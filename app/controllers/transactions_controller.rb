@@ -16,20 +16,24 @@ class TransactionsController < ApplicationController
         @transaction = Transaction.new(transaction_params)
         amount = transaction_params[:amount]
         token = transaction_params[:token]
-        
-        buy_success = @transaction.buy_gateway(token, amount)
-        if buy_success && buy_success['transaction']['succeeded'] == true
-            if @transaction.save && @transaction.save_card == true
-                @card = new_card(@transaction, buy_success)
-                redirect_to flights_path, notice: "Your purchase was successful and payment method saved."
-            elsif @transaction.save
-                redirect_to flights_path, notice: "Your purchase was successful."
+        if @transaction.valid?
+            buy_success = @transaction.buy_gateway(token, amount)
+            if buy_success && buy_success['transaction']['succeeded'] == true
+                if @transaction.save && @transaction.save_card == true
+                    @card = new_card(@transaction, buy_success)
+                    redirect_to flights_path, notice: "Your purchase was successful and payment method saved."
+                elsif @transaction.save
+                    redirect_to flights_path, notice: "Your purchase was successful."
+                else
+                    render :new, alert: "payment made but failed to save"
+                end
             else
-                render :new, alert: "payment made but failed to save"
-            end
-        else
-            redirect_to flights_path, alert: "Payment declined"
-        end 
+                redirect_to flights_path, alert: "Payment declined"
+            end 
+        else 
+            redirect_to '/transactions/new?flight_id='+@flight.id.to_s, alert: "Email required"
+        end
+
     end
     
 
