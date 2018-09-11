@@ -16,12 +16,14 @@ class TransactionsController < ApplicationController
         @transaction = Transaction.new(transaction_params)
         amount = transaction_params[:amount]
         token = transaction_params[:token]
-
+        
         buy_success = @transaction.buy_gateway(token, amount)
         if buy_success && buy_success['transaction']['succeeded'] == true
             if @transaction.save && @transaction.save_card == true
-                new_card(@transaction)
-                redirect_to flights_path, notice: "Your purchase was successful."
+                @card = new_card(@transaction, buy_success)
+                @transaction.saved_cards_id = @card.id
+                @transaction.save
+                redirect_to flights_path, notice: "Your purchase was successful and payment method saved."
             elsif @transaction.save
                 redirect_to flights_path, notice: "Your purchase was successful."
             else
@@ -37,7 +39,7 @@ class TransactionsController < ApplicationController
     private
 
     def transaction_params
-        params.require(:transaction).permit(:email, :token, :amount, :flight_id, :quantity, :save_card)
+        params.require(:transaction).permit(:email, :token, :amount, :flight_id, :quantity, :save_card, :saved_cards_id)
     end
 
 end

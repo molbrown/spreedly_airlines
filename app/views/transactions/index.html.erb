@@ -18,7 +18,7 @@
                 <th scope="row"><%= time_ago_in_words(t.created_at)+ " ago" %></th>
                 <td>$<%= (t.amount)/100 %></td>
                 <td><%= t.email %></td>
-                <td><%= "####" %></td>
+                <td><%= SavedCard.find(t.saved_cards_id).last_four %></td>
                 <td><%= t.flight.destination %></td>
                 <td><%= t.quantity %></td>
             </tr>

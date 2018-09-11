@@ -2,6 +2,7 @@ require 'httparty'
 
 class Transaction < ApplicationRecord
     belongs_to :flight
+    # belongs_to :saved_card
     include HTTParty
 
     validates :email, presence: true
