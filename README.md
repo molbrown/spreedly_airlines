@@ -1,6 +1,8 @@
 
 # spreedly_airlines
 
+A project to experience the Spreedly API from the customer's perspective. View my 'live' site here: [Spreedly Airlines](https://molly-airlines.herokuapp.com/)
+
 Notes on my experience:
 
 - I had the hardest time understanding how to fold PMD into my app. The "receiver" is not as intuitive as a gateway, but having the "Expedia" example helps to get a comparitive context.
